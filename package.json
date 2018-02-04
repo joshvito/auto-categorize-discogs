@@ -1,0 +1,28 @@
+{
+  "name": "discogs-auto-categorize",
+  "version": "1.0.0",
+  "description": "A node app that will auto categorize your discogs collection for you.",
+  "main": "index.js",
+  "dependencies": {
+    "disconnect": "^1.2.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "npm run test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joshvito/auto-categorize-discogs.git"
+  },
+  "keywords": [
+    "discogs",
+    "categorize",
+    "organize"
+  ],
+  "author": "Josh Vito",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/joshvito/auto-categorize-discogs/issues"
+  },
+  "homepage": "https://github.com/joshvito/auto-categorize-discogs#readme"
+}
