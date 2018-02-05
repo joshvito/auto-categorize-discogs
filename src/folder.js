@@ -11,6 +11,7 @@
 const _discoverFolder = (_release, _foldersmap, forceRecategorization = false) => {
     const year = _release.basic_information.year;
     const name = _convertYearToFolderName(year);
+    if (!year || !name) { console.warn(JSON.stringify(_release, null, 1)) }
 
     if (forceRecategorization || _release.folder_id === 1) {
         if (_foldersmap && _foldersmap.hasOwnProperty(name)) {
@@ -43,7 +44,17 @@ const _foldersToMap = (folders, prevMap = null) => {
     return prevMap ? Object.assign(prevMap, newMap) : newMap;
 };
 
+const _filterOutDupes = (folders) => {
+    return folders
+        .filter(folder => !folder.id) // we only want to create folders that don't exist
+        .filter((value, index, self) => {
+            // make sure we get unique folder names
+            return self.findIndex(o => o.name === value.name) === index;
+        });
+}
+
 module.exports = {
     discoverFolder: _discoverFolder,
+    filterOutDupes: _filterOutDupes,
     foldersToMap: _foldersToMap
 }
