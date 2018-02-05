@@ -57,16 +57,20 @@ _FP.then((data) => {
 .catch(error => console.error(error));
 
 const categorizeReleases = (releases, foldermap) => {
-    let releasePromises = releases.map(release => {
+    releases.forEach(release => {
         const folder = FOLDERS.discoverFolder(release, foldermap);
-        return folder ? moveReleaseInstanceToFolder(release, folder) : Promise.resolve();
+        // short circuit if folder categories match
+        if (folder.id === release.folder_id) { 
+            console.warn(`${release.basic_information.title} is in the correct category.`)
+            return;
+         }
+        
+        moveReleaseInstanceToFolder(release, folder).then(data => {
+            console.log(`${release.basic_information.title} from ${release.basic_information.year} was re-categorized to ${folder.name}`)
+        }).catch(error => {
+            console.error(error, ` While trying to recategorize ${release.basic_information.title} from ${release.basic_information.year} to ${folder.name}`);
+        })
     });
-    Promise.all(releasePromises).then(data => {
-        debugger;
-    }).catch(error => {
-        debugger;
-        console.warn(error);
-    })
 }
 
 const createUserFolder = (name) => {
