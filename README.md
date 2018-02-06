@@ -15,7 +15,7 @@ module.exports = {
 
 See the Discogs API docs on how to generate a `userToken`. [here](https://www.discogs.com/settings/developers)
 
-TODO:
+TODOs
 
 1. Troubleshoot why last page was not categorized
 2. Make this callable from console/cmd
