@@ -2,11 +2,31 @@ const FOLDERS = require('./src/folder');
 const API = require('./src/api');
 const PAGE_OPTIONS = { page: 1, per_page: 10 };
 
-let categorizeByDecade = (user_folders_promise, page_promise) => {
+const checkForMorePages = (meta, pageOptions) => {
+    if (!meta) return pageOptions;
+    if (meta.pages > meta.page) {
+        return {
+            page: meta.page + 1,
+            per_page: meta.per_page
+        }
+    }
+    return false;
+}
+
+const callApiWithDelay = (cb) => {
+    // this is because the API only allows 60 requests per minute
+    setTimeout(() => {
+        cb()
+    }, PAGE_OPTIONS.per_page * 1000) // roughly 1 sec per recategorization
+}
+
+let categorizeByDecade = (user_folders_promise, page_promise, pageOptions) => {
     
     let _FP = Promise.all([user_folders_promise, page_promise]);
     _FP.then((data) => {
         let [folders, page] = data;
+        let _meta = page.pagination;
+        let _nextPageOptions = checkForMorePages(_meta, pageOptions);
         let user_folders_map = FOLDERS.foldersToMap(folders.folders)
     
         let requiredFolders = page.releases.map(release => {
@@ -19,6 +39,7 @@ let categorizeByDecade = (user_folders_promise, page_promise) => {
         if (folderPromises.length === 0 ) {
             setTimeout(() => {
                 API.categorizeReleases(page.releases, user_folders_map);
+                if (_nextPageOptions) callApiWithDelay(() => categorizeByDecade(API.getUserFolders(), API.getPagePromise(_nextPageOptions), _nextPageOptions));
             }, 0)
             return;
         }
@@ -27,6 +48,7 @@ let categorizeByDecade = (user_folders_promise, page_promise) => {
             const updated_folders_map = FOLDERS.foldersToMap(data, user_folders_map); 
             setTimeout(() => {
                 API.categorizeReleases(page.releases, updated_folders_map);
+                if (_nextPageOptions) callApiWithDelay(() => categorizeByDecade(API.getUserFolders(), API.getPagePromise(_nextPageOptions), _nextPageOptions));
             }, 0)
             return updated_folders_map;
         })
@@ -38,4 +60,4 @@ let categorizeByDecade = (user_folders_promise, page_promise) => {
     .catch(error => console.error(error));
 }
 
-categorizeByDecade(API.getUserFolders(), API.getPagePromise(PAGE_OPTIONS));
+categorizeByDecade(API.getUserFolders(), API.getPagePromise(PAGE_OPTIONS), PAGE_OPTIONS);
