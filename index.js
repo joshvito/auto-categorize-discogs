@@ -15,9 +15,10 @@ const checkForMorePages = (meta, pageOptions) => {
 
 const callApiWithDelay = (cb) => {
     // this is because the API only allows 60 requests per minute
+    // roughly ~2 sec per possible recategorization this includes overhead for requests for collection, folders,  and folder creation
     setTimeout(() => {
         cb()
-    }, PAGE_OPTIONS.per_page * 1000) // roughly 1 sec per recategorization
+    }, PAGE_OPTIONS.per_page * 1901) 
 }
 
 let categorizeByDecade = (user_folders_promise, page_promise, pageOptions) => {
