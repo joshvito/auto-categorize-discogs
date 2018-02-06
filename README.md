@@ -1,7 +1,7 @@
 # auto-categorize-discogs
 
 (Work in Progress)
-A node app that will auto categorize your discogs collection for you.
+A node app that will auto categorize your discogs collection for you. Currently, this just categorizes by decade.
 
 if you want to use this, you need to include your own `/src/pat.js` file that includes your connection information to the [Discogs Api](https://www.discogs.com/developers/#page:home,header:home-quickstart). Specifically, the file should just be a simple object in the form
 
