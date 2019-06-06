@@ -19,7 +19,7 @@ See the Discogs API docs on how to generate a `userToken`. [here](https://www.di
 TODOs
 
 1. Troubleshoot why last page was not categorized
-2. Make this callable from console/cmd
-3. figure out how to re-categorize re-releases into the master release year (e.g. the year the album was recorded)
-4. add better throttling calculation by counting requests and use a timer
+2. ~~Make this callable from console/cmd~~
+3. ~~figure out how to re-categorize re-releases into the master release year (e.g. the year the album was recorded)~~
+4. add better throttling calculation by counting requests and use a timer, OR check if the response meta data is availble from `disconnect`
 5. categorize uncategorizable releases into an "Error" or "Special" folder
