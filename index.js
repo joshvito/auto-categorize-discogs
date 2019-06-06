@@ -18,7 +18,7 @@ const callApiWithDelay = (cb) => {
     // roughly ~2 sec per possible recategorization this includes overhead for requests for collection, folders,  and folder creation
     setTimeout(() => {
         cb()
-    }, PAGE_OPTIONS.per_page * 1901) 
+    }, PAGE_OPTIONS.per_page * 9000) 
 }
 
 let categorizeByDecade = (user_folders_promise, page_promise, pageOptions) => {
@@ -29,18 +29,21 @@ let categorizeByDecade = (user_folders_promise, page_promise, pageOptions) => {
         let _meta = page.pagination;
         let _nextPageOptions = checkForMorePages(_meta, pageOptions);
         let user_folders_map = FOLDERS.foldersToMap(folders.folders)
-    
-        let requiredFolders = page.releases.map(release => {
-            return FOLDERS.discoverFolder(release, user_folders_map);
+        
+        let /**
+           * @param {[any, any]} release , tuple of [release, master]
+           */
+        requiredFolders = page.releases.map(data => {
+            return FOLDERS.discoverFolder(data, user_folders_map);
         })
     
         const foldersToCreate = FOLDERS.filterOutDupes(requiredFolders);
         const folderPromises = foldersToCreate.map(f => API.createUserFolder(f.name));
-        
+                
         if (folderPromises.length === 0 ) {
             setTimeout(() => {
                 API.categorizeReleases(page.releases, user_folders_map);
-                if (_nextPageOptions) callApiWithDelay(() => categorizeByDecade(API.getUserFolders(), API.getPagePromise(_nextPageOptions), _nextPageOptions));
+                if (_nextPageOptions) callApiWithDelay(() => categorizeByDecade(API.getUserFolders(), API.getPageOfReleasesPromise(_nextPageOptions), _nextPageOptions));
             }, 0)
             return;
         }
@@ -49,7 +52,7 @@ let categorizeByDecade = (user_folders_promise, page_promise, pageOptions) => {
             const updated_folders_map = FOLDERS.foldersToMap(data, user_folders_map); 
             setTimeout(() => {
                 API.categorizeReleases(page.releases, updated_folders_map);
-                if (_nextPageOptions) callApiWithDelay(() => categorizeByDecade(API.getUserFolders(), API.getPagePromise(_nextPageOptions), _nextPageOptions));
+                if (_nextPageOptions) callApiWithDelay(() => categorizeByDecade(API.getUserFolders(), API.getPageOfReleasesPromise(_nextPageOptions), _nextPageOptions));
             }, 0)
             return updated_folders_map;
         })
@@ -61,4 +64,4 @@ let categorizeByDecade = (user_folders_promise, page_promise, pageOptions) => {
     .catch(error => console.error(error));
 }
 
-categorizeByDecade(API.getUserFolders(), API.getPagePromise(PAGE_OPTIONS), PAGE_OPTIONS);
+categorizeByDecade(API.getUserFolders(), API.getPageOfReleasesPromise(PAGE_OPTIONS), PAGE_OPTIONS);

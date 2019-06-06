@@ -1,6 +1,6 @@
 /**
  * 
- * @param {*} _release 
+ * @param {[any, any]} _data [release, master] 
  * @param {*} _foldersmap 
  * @param {*} forceRecategorization boolean, optional, default = false
  * // determine folder name
@@ -8,8 +8,9 @@
     // check if it already exists
     // return existing or new folder
  */
-const _discoverFolder = (_release, _foldersmap, forceRecategorization = false) => {
-    const year = _release.basic_information.year;
+const _discoverFolder = (_data, _foldersmap, forceRecategorization = false) => {
+  const [_release, _master] = _data;
+    const year = _master.year || _release.basic_information.year;
     const name = _convertYearToFolderName(year);
     if (!year || !name) { console.warn(JSON.stringify(_release, null, 1)) }
 
@@ -27,6 +28,10 @@ const _discoverFolder = (_release, _foldersmap, forceRecategorization = false) =
     }
 }
 
+/**
+ * @param {string | number} year
+ * @returns {string}
+ */
 const _convertYearToFolderName = (year) => {
     if (typeof year !== 'number') {
         year = parseInt(year, 10)

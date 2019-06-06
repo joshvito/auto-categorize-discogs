@@ -1,7 +1,7 @@
 # auto-categorize-discogs
 
-(Work in Progress)
-A node app that will auto categorize your discogs collection for you. Currently, this just categorizes by decade.
+
+A node app that will auto categorize your discogs collection for you. Currently, this just categorizes by decade of the master release. For example, if you have a release in your collection that was re-released in 2010, but was originally released in 1975, it will put it in a foler `1970's`.
 
 if you want to use this, you need to include your own `/src/pat.js` file that includes your connection information to the [Discogs Api](https://www.discogs.com/developers/#page:home,header:home-quickstart). Specifically, the file should just be a simple object in the form
 
