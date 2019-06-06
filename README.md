@@ -9,7 +9,8 @@ if you want to use this, you need to include your own `/src/pat.js` file that in
 // pat.js
 module.exports = {
     name: 'yourusername',
-    token: 'token_string'
+    userToken: 'token_string',
+    userAgent: 'YourAppName/0.1 +http://your.app.url'
 }
 ```
 

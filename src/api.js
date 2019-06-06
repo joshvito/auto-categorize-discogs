@@ -1,7 +1,7 @@
 let Discogs = require('disconnect').Client;
 const USER = require('./pat.js');
 const FOLDERS = require('./folder');
-const _dis = new Discogs({ userToken: USER.token }); // Authenticate by user token
+const _dis = new Discogs(USER.userAgent, { userToken: USER.userToken }); // Authenticate by user token
 const user_collection = _dis.user().collection();
 
 const categorizeReleases = (releases, foldermap) => {
