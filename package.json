@@ -1,13 +1,13 @@
 {
   "name": "discogs-auto-categorize",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A node app that will auto categorize your discogs collection for you.",
   "main": "index.js",
   "dependencies": {
     "disconnect": "^1.2.1"
   },
   "devDependencies": {
-    "eslint": "^5.16.0"
+    "eslint": "^7.7.0"
   },
   "scripts": {
     "test": "npm run test",
