@@ -51,7 +51,7 @@ const _foldersToMap = (folders, prevMap = null) => {
 
 const _filterOutDupes = (folders) => {
     return folders
-        .filter(folder => !folder.id) // we only want to create folders that don't exist
+        .filter(folder => !(folder && folder.id)) // we only want to create folders that don't exist
         .filter((value, index, self) => {
             // make sure we get unique folder names
             return self.findIndex(o => o.name === value.name) === index;
